@@ -25,6 +25,48 @@ var connection = mysql.createConnection({
             name: "FirstAction",
             type: "list",
             message: "What would you like to do?",
-            choices: ["View All Employees", "View All Employees By Department", "View All Employees By Manager", "Add Employee", "Remove Employee", "Update Employee Role", "Update Employee Manager", "View All Roles", "Add Role", "Remove Role"]
+            choices: ["View All Employees", "View All Employees By Department", "View All Employees By Manager", "Add Employee", "Remove Employee", "Update Employee Role", "Update Employee Manager", "View All Roles", "Add Role", "Remove Role", "EXIT"]
+        })
+        .then(function(answer){
+            const userChoice = answer.FirstAction;
+
+            switch (userChoice) {
+                case "View All Employees":
+                    console.log("view all ems")
+                    break;
+                case "View All Employees By Department":
+                    console.log("view all by dept")
+                    break;
+                case "View All Employees By Manager":
+                    console.log("view all by manager")
+                    break;
+                case "Add Employee":
+                    console.log("add em")
+                    break;
+                case "Remove Employee":
+                    console.log("remove em")
+                    break;
+                case "Update Employee Role":
+                    console.log("update em role")
+                    break;
+                case "Update Employee Manager":
+                    console.log("update em manager")
+                    break;
+                case "View All Roles":
+                    console.log("view all roles")
+                    break;
+                case "Add Role":
+                    console.log("add role")
+                    break;
+                case "Remove Role":
+                    console.log("rem role")
+                    break;
+                case "EXIT":
+                    console.log("Goodbye!")
+                    connection.end();
+                    break;
+                
+                    
+            }
         })
   }
