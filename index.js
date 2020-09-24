@@ -43,6 +43,7 @@ var connection = mysql.createConnection({
                     break;
                 case "Add Employee":
                     console.log("add em")
+                    addEmployee();
                     break;
                 case "Remove Employee":
                     console.log("remove em")
@@ -81,4 +82,39 @@ var connection = mysql.createConnection({
           start();
       })
 
-  }
+  };
+
+ function addEmployee(){
+
+    connection.query("SELECT * FROM employee WHERE manager_id IS NULL", function(err, results) {
+        if (err) throw err;
+
+        console.table(results);
+    })
+
+    // inquirer
+    //     .prompt([
+
+    //         {
+    //             name: "firstName",
+    //             type:"input",
+    //             message: "What is the employee's first name?"
+    //         },
+
+    //         {
+    //             name: "lastName",
+    //             type:"input",
+    //             message: "What is the employee's last name?",
+    //         },
+
+    //         {
+    //             name: "role",
+    //             type: "list",
+    //             message: "What is the employee's role",
+    //             choices: ["Senior Salesperson", "Salesperson", "Accountant", "Software Engineer", "HR Rep", "Junior Engineer", "Senior Engineer", "Junior Accountant", "Senior Accountant", "Senior HR Rep"]
+
+    //         }
+    //     ])
+        
+
+ }
