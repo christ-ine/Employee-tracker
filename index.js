@@ -22,17 +22,18 @@ var connection = mysql.createConnection({
   function start(){
       inquirer  
         .prompt({
-            name: "FirstAction",
+            name: "MainMenu",
             type: "list",
             message: "What would you like to do?",
             choices: ["View All Employees", "View All Employees By Department", "View All Employees By Manager", "Add Employee", "Remove Employee", "Update Employee Role", "Update Employee Manager", "View All Roles", "Add Role", "Remove Role", "EXIT"]
         })
         .then(function(answer){
-            const userChoice = answer.FirstAction;
+            const userChoice = answer.MainMenu;
 
             switch (userChoice) {
                 case "View All Employees":
                     console.log("view all ems")
+                    allEmployees();
                     break;
                 case "View All Employees By Department":
                     console.log("view all by dept")
@@ -69,4 +70,15 @@ var connection = mysql.createConnection({
                     
             }
         })
+  };
+
+  function allEmployees(){
+      var query = "SELECT e.id, e.first_name, e.last_name, role.title, department.name AS department, role.salary, concat(m.first_name, ' ', m.last_name) AS manager FROM employee e LEFT JOIN employee m ON e.manager_id = m.id INNER JOIN role ON e.role_id = role.id INNER JOIN department ON role.department_id = department.id ORDER BY ID ASC";
+      connection.query(query, function(err, res){
+          if (err) throw err;
+
+          console.table(res);
+          start();
+      })
+
   }
