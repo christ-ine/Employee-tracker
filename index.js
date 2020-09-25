@@ -37,9 +37,11 @@ function start() {
                     break;
                 case "View All Employees By Department":
                     console.log("view all by dept")
+                    allDepartments();
                     break;
                 case "View All Employees By Manager":
                     console.log("view all by manager")
+                    allManagers();
                     break;
                 case "Add Employee":
                     console.log("add em")
@@ -84,6 +86,29 @@ function allEmployees() {
 
 };
 
+function allDepartments(){
+
+    var query = "SELECT * FROM department"
+
+    connection.query(query, function (err, res){
+        if (err) throw err;
+
+        console.table(res);
+        start();
+    })
+};
+
+function allManagers(){
+    var query = "SELECT m.id, concat(m.first_name, ' ', m.last_name) AS manager FROM employee m WHERE manager_id IS NULL";
+    connection.query(query, function (err, res){
+        if (err) throw err;
+
+        console.table(res);
+        start();
+    })
+}
+
+
 function addEmployee() {
 
     
@@ -96,16 +121,20 @@ function addEmployee() {
 
     roleChoicesArr = [];
     managerChoicesArr = [];
+    // roleIDArr = [];
+    // managerIdArr = [];
 
-    connection.query("SELECT title FROM role", function (err, results) {
+    connection.query("SELECT id, title FROM role", function (err, results) {
         if (err) throw err;
 
         for (var i = 0; i < results.length; i++) {
             roleChoicesArr.push(results[i].title)
         }
+
+        // console.log(roleChoicesArr)
     });
 
-    connection.query("SELECT concat(m.first_name, ' ', m.last_name) AS manager FROM employee m WHERE manager_id IS NULL", function(err, results) {
+    connection.query("SELECT m.id, concat(m.first_name, ' ', m.last_name) AS manager FROM employee m WHERE manager_id IS NULL", function(err, results) {
         if (err) throw err;
 
         for (var i = 0; i < results.length; i++) {
@@ -116,6 +145,26 @@ function addEmployee() {
 
     });
 
+    // connection.query("SELECT id, title FROM role", function (err, results) {
+    //     if (err) throw err;
+
+    //     for (var i = 0; i < results.length; i++) {
+    //         roleIDArr.push(results[i])
+    //     }
+
+    //     // console.log(roleChoicesArr)
+    // });
+
+    // connection.query("SELECT m.id, concat(m.first_name, ' ', m.last_name) AS manager FROM employee m WHERE manager_id IS NULL", function(err, results) {
+    //     if (err) throw err;
+
+    //     for (var i = 0; i < results.length; i++) {
+    //         managerIdArr.push(results[i])
+    //     }
+
+    //     // console.log(managerChoicesArr);
+
+    // });
 
 
     inquirer
@@ -150,6 +199,23 @@ function addEmployee() {
 
 
         ])
+        .then(function(answer){
+
+            connection.query(
+                "INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?)",
+                {
+                    first_name: answer.firstName,
+                    last_name: answer.lastName,
+                    role_id: answer.role,
+                    manager_id: answer.manager
+                },
+                function(err, data){
+                    if (err) throw err;
+                    console.log("Employee successfully added!")
+                    console.table(data)
+                    }
+            )
+        })
 
 
 }
