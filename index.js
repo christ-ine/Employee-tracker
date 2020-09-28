@@ -49,6 +49,7 @@ function start() {
                     break;
                 case "Remove Employee":
                     console.log("remove em")
+                    removeEmployee();
                     break;
                 case "Update Employee Role":
                     console.log("update em role")
@@ -108,6 +109,25 @@ function allManagers(){
     })
 }
 
+function removeEmployee(){
+
+    var employeesArr = [];
+
+    connection.query("SELECT employee.first_name, employee.last_name FROM employee", (err, res) => {
+        if (err) throw err;
+
+        for (var i = 0; i < res.length; i++){
+            employeesArr.push(res[i].first_name + " "+ res[i].last_name)
+        }
+
+        console.log(employeesArr)
+    })
+
+
+    // var query = "DELETE FROM employee n where first concat(m.first_name, ' ', m.last_name) AS name = ?"
+
+}
+
 
 function addEmployee() {
 
@@ -128,7 +148,7 @@ function addEmployee() {
         if (err) throw err;
 
         for (var i = 0; i < results.length; i++) {
-            roleChoicesArr.push(results[i].title)
+            roleChoicesArr.push(results[i].id)
         }
 
         // console.log(roleChoicesArr)
@@ -138,7 +158,7 @@ function addEmployee() {
         if (err) throw err;
 
         for (var i = 0; i < results.length; i++) {
-            managerChoicesArr.push(results[i].manager)
+            managerChoicesArr.push(results[i].id)
         }
 
         // console.log(managerChoicesArr);
@@ -185,7 +205,7 @@ function addEmployee() {
             {
                 name: "role",
                 type: "list",
-                message: "What is the employee's role",
+                message: "What is the employee's role id?",
                 choices: roleChoicesArr,
 
             },
@@ -193,7 +213,7 @@ function addEmployee() {
             {
                 name: "manager",
                 type: "list",
-                message: "Who is the employee's manager",
+                message: "What is the employee's manager id?",
                 choices: managerChoicesArr,
             }
 
@@ -202,17 +222,17 @@ function addEmployee() {
         .then(function(answer){
 
             connection.query(
-                "INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?)",
+                "INSERT INTO employee SET ?",
                 {
                     first_name: answer.firstName,
                     last_name: answer.lastName,
                     role_id: answer.role,
                     manager_id: answer.manager
                 },
-                function(err, data){
+                function(err, res){
                     if (err) throw err;
-                    console.log("Employee successfully added!")
-                    console.table(data)
+                    console.log(`Employee ${answer.firstName} ${answer.lastName} successfully added`)
+                    allEmployees();
                     }
             )
         })
