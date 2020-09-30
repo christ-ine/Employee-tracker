@@ -1,7 +1,9 @@
 # Employee Management System
 
 ## Description 
-    
+
+* [Screenrecording](https://drive.google.com/file/d/17jlEbl3tp5oNpkbajdL-N_9WKjt7DWW3/view)
+
 Company rosters are often hard to management. This app seeks to remedy this problem by providing an easy, straightforward method to obtain department, role, salary, and manager information about every employee. It also provides an easy method to add new employees, update employee information, and remove employees. 
     
     
