@@ -111,17 +111,30 @@ function allManagers(){
 
 function removeEmployee(){
 
-    var employeesArr = [];
+    let employeeChoicesArr = [];
 
-    connection.query("SELECT employee.first_name, employee.last_name FROM employee", (err, res) => {
+    connection.query("SELECT id FROM employee", function(err, results) {
         if (err) throw err;
 
-        for (var i = 0; i < res.length; i++){
-            employeesArr.push(res[i].first_name + " "+ res[i].last_name)
+        for (var i = 0; i < results.length; i++){
+            employeeChoicesArr.push(results[i].id)
         }
 
-        console.log(employeesArr)
+        console.log(employeeChoicesArr)
     })
+
+    inquirer
+        .prompt([
+            {
+                name: "removeName",
+                type: "list",
+                message: "Which employee would you like to remove?",
+                choices: ["hello", "testing"]
+            },
+        ])
+        // .then(function(answer)){
+        //     connection.query("DELETE FROM employee WHERE first_name")
+        // }
 
 
     // var query = "DELETE FROM employee n where first concat(m.first_name, ' ', m.last_name) AS name = ?"
